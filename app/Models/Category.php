@@ -6,60 +6,66 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    //
     protected $connection = 'mysql_products';
-
-    protected $fillable = ['name','parent_id','is_directory','level','path'];
-
+    //
+    protected $fillable = ['name', 'is_directory', 'level', 'path'];
     protected $casts = [
       'is_directory' => 'boolean',
     ];
 
-    public static function boot()
+    protected static function boot()
     {
-      // code...
       parent::boot();
-      //监听Category的创建事件，用于初始化path和level的值
-      static::creating(function (Category $category){
-        //如果创建的是一个根目录
-        if (is_null($category->parent_id)) {
-          $category->level = 0;
-          $category->path = '-';
-        }else{
-          $category->level = $category->parent->level+1;
-          $category->path =  $category->parent->path.$category->parent_id.'-';
-        }
+      // 监听 Category 的创建事件，用于初始化 path 和 level 字段值
+      static::creating(function (Category $category) {
+          // 如果创建的是一个根类目
+          if (is_null($category->parent_id)) {
+              // 将层级设为 0
+              $category->level = 0;
+              // 将 path 设为 -
+              $category->path  = '-';
+          } else {
+              // 将层级设为父类目的层级 + 1
+              $category->level = $category->parent->level + 1;
+              // 将 path 值设为父类目的 path 追加父类目 ID 以及最后跟上一个 - 分隔符
+              $category->path  = $category->parent->path.$category->parent_id.'-';
+          }
       });
-
     }
 
     public function parent()
     {
-      return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function children()
     {
-      return $this->hasMany(Category::class,'parent_id');
+        return $this->hasMany(Category::class, 'parent_id');
     }
 
-    public function product()
+    public function products()
     {
-      return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class);
     }
 
+    // 定义一个访问器，获取所有祖先类目的 ID 值
     public function getPathIdsAttribute()
     {
-      return array_filter(explode('-',trim($this->path,'-')));
+        // trim($str, '-') 将字符串两端的 - 符号去除
+        // explode() 将字符串以 - 为分隔切割为数组
+        // 最后 array_filter 将数组中的空值移除
+        return array_filter(explode('-', trim($this->path, '-')));
     }
 
-//定义一个访问器，获取所有祖先类目并且按照层级进行排序
+    // 定义一个访问器，获取所有祖先类目并按层级排序
     public function getAncestorsAttribute()
     {
-      return Category::query()
-              ->whereIn('id',$this->path_ids)
-              ->orderBy('level')
-              ->get();
+        return Category::query()
+            // 使用上面的访问器获取所有祖先类目 ID
+            ->whereIn('id', $this->path_ids)
+            // 按层级排序
+            ->orderBy('level')
+            ->get();
     }
 
     // 定义一个访问器，获取以 - 为分隔的所有祖先类目名称以及当前类目的名称

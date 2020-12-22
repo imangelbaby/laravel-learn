@@ -1,26 +1,27 @@
 <?php
 
-namespace App;
-
-use App\Models\UserInfo;
+namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\UserInfo;
 
 class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $connection = 'mysql';
     public $incrementing = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id','username', 'Openid', 'password','role_id',
-        'verder_type','status','mobile','login_ip'
+        'id','Openid','username', 'password', 'role_id',
+        'vender_type','status','mobile','login_ip'
     ];
 
     /**
@@ -41,7 +42,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function userinfo($value='')
+    public function userinfo()
     {
       return $this->hasOne(UserInfo::class);
     }
