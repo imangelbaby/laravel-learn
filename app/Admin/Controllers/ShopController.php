@@ -8,7 +8,6 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Support\Facades\Auth;
-
 class ShopController extends AdminController
 {
     /**

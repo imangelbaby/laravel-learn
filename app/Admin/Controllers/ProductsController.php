@@ -33,8 +33,8 @@ class ProductsController extends AdminController
      protected function grid()
      {
          $grid = new Grid(new Product());
-         $shop_id = Shop::select('id')->where('admin_user_id',Auth::guard('admin')->user()->id)->get()->toArray();
-         $grid->model()->whereIn('shop_id',$shop_id);
+//         $shop_id = Shop::select('id')->where('admin_user_id',Auth::guard('admin')->user()->id)->get()->toArray();
+//         $grid->model()->whereIn('shop_id',$shop_id);
          $grid->id('ID')->sortable();
          $grid->product_core('商品编码');
          $grid->title('商品名称');
