@@ -8,7 +8,6 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-
 class LearnController extends AdminController
 {
 
