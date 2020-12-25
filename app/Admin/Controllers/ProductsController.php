@@ -33,8 +33,8 @@ class ProductsController extends AdminController
      protected function grid()
      {
          $grid = new Grid(new Product());
-//         $shop_id = Shop::select('id')->where('admin_user_id',Auth::guard('admin')->user()->id)->get()->toArray();
-//         $grid->model()->whereIn('shop_id',$shop_id);
+         $shop_id = Shop::select('id')->where('admin_user_id',Auth::guard('admin')->user()->id)->get()->toArray();
+         $grid->model()->whereIn('shop_id',$shop_id);
          $grid->id('ID')->sortable();
          $grid->product_core('商品编码');
          $grid->title('商品名称');
@@ -77,7 +77,6 @@ class ProductsController extends AdminController
      */
     protected function detail($id)
     {
-        return 3;
         $show = new Show(Product::findOrFail($id));
 
         $show->field('id', __('Id'));
@@ -107,7 +106,6 @@ class ProductsController extends AdminController
      */
     protected function form()
     {
-        return 4;
       $form = new Form(new Product);
 
       // 创建一个输入框，第一个参数 title 是模型的字段名，第二个参数是该字段描述

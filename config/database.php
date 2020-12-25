@@ -68,7 +68,7 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '192.168.199.172'),
             'port' => env('DB_PORT', '3306'),
-            'database' => 'lms_2006_products',
+            'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'lms'),
             'password' => env('DB_PASSWORD', 'root'),
             'unix_socket' => env('DB_SOCKET', ''),
